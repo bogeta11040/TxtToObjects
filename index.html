@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Assignment 2</title>
+  </head>
+  <body>
+    <script>
+
+  class Student {
+        constructor(name, address, phone, course) {
+           this.name = name;
+           this.address = address;
+           this.phone = phone;
+           this.course = course;
+  }
+
+  getInfo() {
+    return "Name: " + this.name + "\n"
+         + "Address: " + this.address + "\n"
+         + "Phone: " + this.phone + "\n"
+         + "Course: " + this.course;
+  }
+}
+
+  async function getdata() {
+      try {
+        // Get txt file and format text
+        let response = await fetch('http://v-dresevic.github.io/Advanced-JavaScript-Programming/data/students.txt');
+        let text = await response.text();
+        let formatted = text.split('\n');
+        let k = 1; // counter for naming Student object vars (student1, student2..)
+        // Make Student objects from fetched data
+      for (let i = 0; i < formatted.length + 1; i++) {
+        // Use four rows of our TXT file as parameters for Student constructor f
+       window["student" + k++] = new Student(formatted[0], formatted[1], formatted[2], formatted[3]);
+       formatted.splice(0,4);
+      }
+
+     } catch (err) {
+       console.log("Problem with fetching data.")
+     } finally {
+       // Get all instances of class Student
+       // and (for each) write output of getInfo() to document
+       for (let member in window) {
+     if (window[member] instanceof Student)
+         document.write(window[member].getInfo().replaceAll("\n", "<br>") + "<br><br>");
+        }
+     }
+
+}
+
+getdata();
+      </script>
+  </body>
+</html>
